@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nand2Tetris Capstone Project - Vansh Negi</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: #000000;
+      background: #ffffff;
+      line-height: 1.5;
+      margin: 0;
+      padding: 32px;
+    }
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+    }
+    .print-bar {
+      text-align: right;
+      margin-bottom: 16px;
+    }
+    .print-btn {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #000000;
+      padding: 6px 14px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    h1 {
+      font-size: 22px;
+      margin: 0 0 8px 0;
+      color: #000000;
+    }
+    h2 {
+      font-size: 17px;
+      margin: 26px 0 10px 0;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #000000;
+      color: #000000;
+    }
+    h3 {
+      font-size: 14.5px;
+      margin: 18px 0 6px 0;
+      color: #000000;
+    }
+    p, li {
+      font-size: 14px;
+      color: #000000;
+      margin: 6px 0;
+    }
+    .meta {
+      font-size: 14px;
+      margin-bottom: 18px;
+      color: #000000;
+    }
+    code, pre {
+      font-family: Menlo, Consolas, monospace;
+      color: #000000;
+      background: #f5f5f5;
+    }
+    code {
+      padding: 1px 4px;
+      font-size: 13px;
+    }
+    pre {
+      padding: 10px 12px;
+      border: 1px solid #cccccc;
+      font-size: 12.5px;
+      overflow-x: auto;
+    }
+    .shot {
+      margin: 10px 0 20px 0;
+      page-break-inside: avoid;
+    }
+    .shot img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #cccccc;
+      display: block;
+    }
+    @media print {
+      body { padding: 0; }
+      .print-bar { display: none; }
+      h2 { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="print-bar">
+      <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+    <h1>Nand2Tetris Capstone Project</h1>
+    <div class="meta">
+      <strong>Name:</strong> Vansh Negi<br />
+      <strong>Roll No:</strong> 2501730158<br />
+      <strong>K:</strong> 58
+    </div>
+
+    <h2>Part A: Build the Computer (CPU.hdl, Memory.hdl, Computer.hdl)</h2>
+
+    <h3>1. CPU (CPU.tst)</h3>
+    <p>Built <code>CPU.hdl</code> with A/D registers, ALU, and PC jump logic. Passed <code>CPU.tst</code> in the Hardware Simulator.</p>
+    <div class="shot">
+      <img src="screenshots/cpu_test_pass.png" alt="CPU.tst pass screenshot" />
+    </div>
+
+    <h3>2. Memory (Memory.tst)</h3>
+    <p>Built <code>Memory.hdl</code> mapping RAM16K (<code>0..16383</code>), Screen (<code>16384..24575</code>), and Keyboard (<code>24576</code>). Passed <code>Memory.tst</code>.</p>
+    <div class="shot">
+      <img src="screenshots/memory_test_pass.png" alt="Memory.tst pass screenshot" />
+    </div>
+
+    <h3>3. Computer (ComputerAdd.tst, ComputerMax.tst, ComputerRect.tst)</h3>
+    <p>Connected <code>ROM32K</code>, <code>CPU</code>, and <code>Memory</code> in <code>Computer.hdl</code>. All three Computer tests passed.</p>
+    <div class="shot">
+      <img src="screenshots/computer_add_pass.png" alt="ComputerAdd.tst pass screenshot" />
+    </div>
+    <div class="shot">
+      <img src="screenshots/computer_max_pass.png" alt="ComputerMax.tst pass screenshot" />
+    </div>
+    <div class="shot">
+      <img src="screenshots/computer_rect_pass.png" alt="ComputerRect.tst pass screenshot" />
+    </div>
+
+    <h2>Part B: Hack Assembler (assembler.py)</h2>
+    <p><strong>Question (K mod 3 = 58 mod 3 = 1):</strong> Print a clear error message with the line number for any invalid line instead of crashing.</p>
+    <pre>python3 assembler.py Box.asm Box.hack --symbols
+python3 assembler.py bad_sample.asm
+python3 -m unittest discover -p "test_*.py" -v</pre>
+    <div class="shot">
+      <img src="screenshots/assembler_verification.png" alt="Assembler command verification screenshot" />
+    </div>
+
+    <h2>Part C: Draw a Box (Box.asm / Box.hack)</h2>
+    <p><strong>Question (K = 58):</strong> Draw a black box on the left edge when any key is pressed and clear it when released.</p>
+    <ul>
+      <li><strong>Starting row:</strong> Row 58 (<code>16384 + 32 * 58 = 18240</code>)</li>
+      <li><strong>Width:</strong> <code>16 * ((58 mod 4) + 1) = 48 pixels</code> (3 words per row)</li>
+      <li><strong>Height:</strong> 20 rows (rows 58 to 77)</li>
+    </ul>
+    <p>Loaded <code>Box.asm</code> in the CPU Emulator and held key <code>K</code> (<code>Char code: 75</code>):</p>
+    <div class="shot">
+      <img src="screenshots/cpu_emulator_box.png" alt="CPU Emulator Box screenshot" />
+    </div>
+
+    <h2>One Mistake I Fixed</h2>
+    <p>
+      While testing <code>CPU.hdl</code>, A-instructions like <code>@18240</code> were causing the PC to jump by mistake because I wired the jump signals directly to <code>PC(load=...)</code> without checking if the instruction was a C-instruction. Adding <code>And(a=isC, b=jumpCond, out=loadPC)</code> fixed it so only C-instructions (<code>instruction[15] = 1</code>) can jump.
+    </p>
+  </div>
+</body>
+</html>
